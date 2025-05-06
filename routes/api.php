@@ -27,7 +27,7 @@ Route::post('/player/login', function(Request $request) {
     $username = $request->input('username');
     $player = Player::firstOrCreate(["name" => $username]);
 
-    Log::info('API Route Hit: /player/login {username: ' . $username . '} {playerId: ' . $player->id . '}');
+//    Log::info('API Route Hit: /player/login {username: ' . $username . '} {playerId: ' . $player->id . '}');
 
     return response()->json([
         'success' => true,
@@ -47,8 +47,8 @@ Route::post('/game/start', function (Request $request, HumanService $humanServic
 });
 
 Route::post('/game/pass', function (Request $request, HumanService $humanService) {
-    Log::info('API Route Hit: /game/pass');
-    Log::info('Request Data: ', $request->all());
+//    Log::info('API Route Hit: /game/pass');
+//    Log::info('Request Data: ', $request->all());
     $playerId = $request->input('playerId');
     $cardHandIds = $request->input('cards', []);
 
@@ -66,8 +66,8 @@ Route::post('/game/pass', function (Request $request, HumanService $humanService
 });
 
 Route::post('/game/play', function (Request $request, HumanService $humanService) {
-    Log::info('API Route Hit: /game/play');
-    Log::info('Request Data: ', $request->all());
+//    Log::info('API Route Hit: /game/play');
+//    Log::info('Request Data: ', $request->all());
     $playerId = $request->input('playerId');
     $cardHandId = $request->input('card');
 

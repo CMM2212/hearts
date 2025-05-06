@@ -66,9 +66,9 @@ class GameOrchestrationService
      */
     public function startGameSequence(int $playerId): GamePlayer
     {
-        try{
-            Log::Info("startGame: PlayerId: $playerId");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("startGame: PlayerId: $playerId");
+//        } catch (Exception $e) {}
         $gameInformation = $this->gameService->createGame($playerId);
         $game = $gameInformation['game'];
         $humanGamePlayer = $gameInformation['humanGamePlayer'];
@@ -89,7 +89,7 @@ class GameOrchestrationService
      */
     public function startEndGameSequence(Game $game, Collection $scores)
     {
-        Log::Info("Game ended: " . json_encode($scores) . " GameID: $game->id");
+//        Log::Info("Game ended: " . json_encode($scores) . " GameID: $game->id");
     }
 
     // ------------------ Round Phase ------------------
@@ -108,9 +108,9 @@ class GameOrchestrationService
      */
     public function startRoundSequence(Game $game): void
     {
-        try{
-            Log::Info("startRound: GameID: $game->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("startRound: GameID: $game->id");
+//        } catch (Exception $e) {}
         $round = $this->roundService->createRound($game);
         event(new StartPassingEvent($round));
     }
@@ -130,9 +130,9 @@ class GameOrchestrationService
         $game = $round->game;
         $scores = $this->gameService->calculateGameScores($game);
         $isGameOver = $this->gameService->isGameOver($scores);
-        try{
-            Log::Info("endRound: RoundID: $round->id" . json_encode($scores));
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("endRound: RoundID: $round->id" . json_encode($scores));
+//        } catch (Exception $e) {}
         if ($isGameOver)
             event(new EndGameEvent($game, $scores));
         else
@@ -154,9 +154,9 @@ class GameOrchestrationService
     public function startPassingSequence(Round $round): void
     {
         $passingDirection = $this->roundService->getPassingDirection($round);
-        try{
-            Log::Info("startPassing: RoundID: $round->id, Direction: $passingDirection");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("startPassing: RoundID: $round->id, Direction: $passingDirection");
+//        } catch (Exception $e) {}
         if ($passingDirection === 'none')
             event(new EndPassingEvent($round));
         else
@@ -176,9 +176,9 @@ class GameOrchestrationService
      */
     public function startPassingTurnSequence(Round $round): void
     {
-        try{
-            Log::Info("passingTurn: RoundID: $round->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("passingTurn: RoundID: $round->id");
+//        } catch (Exception $e) {}
         $nextPlayer = $this->roundService->getNextPlayerToPass($round);
         if ($nextPlayer)
             event(new PlayerPassTurnEvent($round, $nextPlayer));
@@ -199,9 +199,9 @@ class GameOrchestrationService
      */
     public function startPlayerPassTurnSequence(Round $round, GamePlayer $player): void
     {
-        try{
-            Log::Info("playerPassingTurn: RoundID: $round->id, PlayerId: $player->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("playerPassingTurn: RoundID: $round->id, PlayerId: $player->id");
+//        } catch (Exception $e) {}
         if ($player->is_human)
             event(new HumanPassInputEvent($round, $player));
         else
@@ -220,9 +220,9 @@ class GameOrchestrationService
      */
     public function startComputerPassInputSequence(Round $round, GamePlayer $player): void
     {
-        try{
-            Log::Info("computerPassInput: RoundID: $round->id, PlayerId: $player->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("computerPassInput: RoundID: $round->id, PlayerId: $player->id");
+//        } catch (Exception $e) {}
         $cards = $this->playerService->getCardsToPass($round, $player);
         event(new PlayerPassInputtedEvent($round, $player, $cards));
     }
@@ -247,7 +247,7 @@ class GameOrchestrationService
             foreach ($cardsToPass as $card)
                 $cards[] = $card->card->suit . ' ' . $card->card->rank;
             $cardsString = implode(', ', $cards);
-            Log::Info("playerPassInputted: RoundID: $round->id, PlayerId: $player->id, Cards: $cardsString");
+//            Log::Info("playerPassInputted: RoundID: $round->id, PlayerId: $player->id, Cards: $cardsString");
         } catch (Exception $e) {}
         $hand = $player->getHandForRound($round);
         $isValid = $this->roundService->isValidPass($hand, $cardsToPass);
@@ -271,9 +271,9 @@ class GameOrchestrationService
      */
     public function endPassingSequence(Round $round): void
     {
-        try{
-            Log::Info("endPassing: RoundID: $round->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("endPassing: RoundID: $round->id");
+//        } catch (Exception $e) {}
         event(new StartTrickPhaseEvent($round));
     }
 
@@ -291,9 +291,9 @@ class GameOrchestrationService
      */
     public function startTrickPhaseSequence(Round $round): void
     {
-        try{
-            Log::Info("startTrickPhase: RoundID: $round->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("startTrickPhase: RoundID: $round->id");
+//        } catch (Exception $e) {}
         event(new StartTrickEvent($round));
     }
 
@@ -310,9 +310,9 @@ class GameOrchestrationService
      */
     public function startTrickSequence(Round $round): void
     {
-        try{
-            Log::Info("startTrick: RoundID: $round->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("startTrick: RoundID: $round->id");
+//        } catch (Exception $e) {}
         $trick = $this->trickService->createTrick($round);
         event(new TrickTurnEvent($trick));
     }
@@ -329,9 +329,9 @@ class GameOrchestrationService
      */
     public function startTrickTurnSequence(Trick $trick): void
     {
-        try{
-            Log::Info("trickTurn: TrickID: $trick->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("trickTurn: TrickID: $trick->id");
+//        } catch (Exception $e) {}
         $nextPlayer = $this->trickService->getNextPlayer($trick);
         if ($nextPlayer)
             event(new PlayerTrickTurnEvent($trick, $nextPlayer));
@@ -352,9 +352,9 @@ class GameOrchestrationService
      */
     public function startPlayerTrickTurnSequence(Trick $trick, GamePlayer $player): void
     {
-        try{
-            Log::Info("playerTrickTurn: TrickID: $trick->id, PlayerId: $player->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("playerTrickTurn: TrickID: $trick->id, PlayerId: $player->id");
+//        } catch (Exception $e) {}
         if ($player->is_human)
             event(new HumanTrickInputEvent($trick, $player));
         else
@@ -373,9 +373,9 @@ class GameOrchestrationService
      */
     public function startComputerTrickInputSequence(Trick $trick, GamePlayer $player): void
     {
-        try{
-            Log::Info("computerTrickInput: TrickId: $trick->id PlayerId: $player->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("computerTrickInput: TrickId: $trick->id PlayerId: $player->id");
+//        } catch (Exception $e) {}
         $cardhand = $this->playerService->getCardToPlay($trick, $player);
         event(new PlayerTrickInputtedEvent($trick, $player, $cardhand));
     }
@@ -395,9 +395,9 @@ class GameOrchestrationService
      */
     public function startPlayerTrickInputtedSequence(Trick $trick, GamePlayer $player, CardHand $cardhand)
     {
-        try{
-            Log::Info("playerTrickInputted: TrickId: $trick->id PlayerId: $player->id, Card: $cardhand->card");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("playerTrickInputted: TrickId: $trick->id PlayerId: $player->id, Card: $cardhand->card");
+//        } catch (Exception $e) {}
         $isValid = $this->playerService->isValidCard($trick, $player, $cardhand);
         if ($isValid)
             $this->trickService->discardCard($trick, $cardhand);
@@ -418,9 +418,9 @@ class GameOrchestrationService
      */
     public function startEndTrickSequence(Trick $trick)
     {
-        try{
-            Log::Info("endTrick: TrickId: $trick->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("endTrick: TrickId: $trick->id");
+//        } catch (Exception $e) {}
         if ($trick->round->tricks()->count() >= 13)
             event(new EndTrickPhaseEvent($trick));
         else
@@ -438,9 +438,9 @@ class GameOrchestrationService
      */
     public function startEndTrickPhaseSequence(Trick $trick)
     {
-        try{
-            Log::Info("endTrickPhase: TrickId: $trick->id");
-        } catch (Exception $e) {}
+//        try{
+//            Log::Info("endTrickPhase: TrickId: $trick->id");
+//        } catch (Exception $e) {}
         $round = $trick->round;
         event(new EndRoundEvent($round));
     }
